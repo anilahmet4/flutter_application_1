@@ -37,8 +37,35 @@ class _DataPageState extends State<DataPage> {
     ["06/02/2024", "350"],
     ["08/02/2024", "245"],
     ["11/02/2024", "90"],
+    ["11/02/2024", "90"],
+    ["11/02/2024", "90"],
+    ["11/02/2024", "90"],
+    ["11/02/2024", "90"],
+    ["11/02/2024", "90"],
+    ["11/02/2024", "90"],
+    ["11/02/2024", "90"],
+    ["08/02/2024", "245"],
+    ["08/02/2024", "245"],
+    ["11/02/2024", "90"],
+    ["11/02/2024", "90"],
+    ["11/02/2024", "90"],
+    ["11/02/2024", "90"],
+    ["11/02/2024", "90"],
+    ["11/02/2024", "90"],
+    ["11/02/2024", "90"],
+    ["08/02/2024", "245"],
+    ["11/02/2024", "90"],
+    ["11/02/2024", "90"],
+    ["11/02/2024", "90"],
+    ["11/02/2024", "90"],
+    ["08/02/2024", "245"],
+    ["11/02/2024", "90"],
+    ["11/02/2024", "90"],
+    ["11/02/2024", "90"],
+    ["11/02/2024", "90"],
   ];
 
+  // ignore: unused_field
   File? _selectedImage;
 
   void showPopupButton() async {
@@ -98,6 +125,12 @@ class _DataPageState extends State<DataPage> {
     );
   }
 
+  void deleteTask(int index){
+    setState(() {
+      denemeList.removeAt(index);
+    });
+  }
+
   //asıl body vs
   @override
   Widget build(BuildContext context) {
@@ -109,26 +142,30 @@ class _DataPageState extends State<DataPage> {
         child: const Icon(Icons.add),
       ),
       body:
-          //SingleChildScrollView(
-          Column(
-        children: [
-          const DataSetConainer(
-            dayText: "Fiş Tarihi",
-            priceText: "Tutar",
-          ),
-          ListView.builder(
-            itemCount: denemeList.length,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              return DataSetConainer(
-                dayText: denemeList.reversed.toList()[index][0],
-                priceText: denemeList.reversed.toList()[index][1],
-              );
-            },
-          ),
-        ],
-      ),
+        Column(
+          children: [
+            DataSetConainer(
+              dayText: "Fiş Tarihi",
+              priceText: "Tutar",
+              deleteFunction: null,
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: denemeList.length,
+                //shrinkWrap: false,
+                physics: const BouncingScrollPhysics(),
+                itemBuilder: (context, index) {
+                  int reversedIndex = denemeList.length - 1 - index;
+                  return DataSetConainer(
+                    dayText: denemeList.toList()[reversedIndex][0],
+                    priceText: denemeList.toList()[reversedIndex][1],
+                    deleteFunction: (context) => deleteTask(reversedIndex),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
     );
   }
 

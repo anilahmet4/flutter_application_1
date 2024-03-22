@@ -50,7 +50,7 @@ String standardizeDate(String date) {
 // Finds the highest price in the given text
 String findTotalPrice(String text) {
   // Match prices with dots or commas as decimal separators
-  final RegExp pricePattern = RegExp(r'\*\d{1,3}(?:[.,]\d{2})');
+  final RegExp pricePattern = RegExp(r'\d+(\.+)(\d{1,2})?');
   final Iterable<RegExpMatch> matches = pricePattern.allMatches(text);
 
   // Convert matches to doubles, taking into account the decimal separator

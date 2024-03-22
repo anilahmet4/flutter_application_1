@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/data/database.dart';
 import 'package:flutter_application_1/utilities/general_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-//Selamlar, commit al lütfen
-
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await HiveService.init(); // Initialize Hive
   runApp(MyApp());
 }
 

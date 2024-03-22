@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/data/database.dart';
 import 'package:flutter_application_1/utilities/text_analysis_util.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_application_1/utilities/data_set_container.dart';
@@ -17,9 +18,22 @@ class _DataPageState extends State<DataPage> {
   final _controller1 = TextEditingController();
   final _controller2 = TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+    loadReceiptsFromHive();
+  }
+
+  Future<void> loadReceiptsFromHive() async {
+    final receipts = await HiveService.getAllReceipts();
+    setState(() {
+      denemeList = receipts;
+    });
+  }
+
   //price list
   List<dynamic> denemeList = [
-    ["01/02/2024", "120"],
+    ["01/02/2022", "120"],
     ["06/02/2024", "350"],
     ["08/02/2024", "245"],
     ["11/02/2024", "90"],
@@ -138,6 +152,9 @@ class _DataPageState extends State<DataPage> {
     final RecognizedText recognizedText =
         await textRecognizer.processImage(inputImage);
 
+    // Debug print the recognized text
+    debugPrint(recognizedText.text);
+
     // Use the recognized text to find the total price and dates
     final String totalPrice = findTotalPrice(recognizedText.text);
     final List<String> dates = findDates(recognizedText.text);
@@ -145,13 +162,38 @@ class _DataPageState extends State<DataPage> {
     // Optionally, choose the first date found (or handle multiple dates as needed)
     final String date = dates.isNotEmpty ? dates.first : 'Date not found';
 
-    // Add the date and total price to denemeList
-    setState(() {
-      denemeList.add([standardizeDate(date), totalPrice]);
-      _selectedImage = image;
-      _controller1.text =
-          recognizedText.text; // Optionally store the recognized text
-    });
+    // Check if a valid price was found before adding to the list and Hive
+    if (totalPrice != 'Price not found.' && totalPrice.isNotEmpty) {
+      setState(() {
+        denemeList.add([standardizeDate(date), totalPrice]);
+        _selectedImage = image;
+        _controller1.text =
+            recognizedText.text; // Optionally store the recognized text
+      });
+
+      // Save the date and total price to Hive
+      await HiveService.addReceipt([date, totalPrice]);
+    } else {
+      // Show popup message when no price is found
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Price Not Found"),
+            content: Text(
+                "No price was found in the scanned image. Please try again."),
+            actions: <Widget>[
+              TextButton(
+                child: Text("OK"),
+                onPressed: () {
+                  Navigator.of(context).pop(); // Dismiss the dialog
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
 
     // Debug print
     debugPrint('Date: $date, Total Price: $totalPrice');

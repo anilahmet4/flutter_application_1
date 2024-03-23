@@ -27,47 +27,18 @@ class _DataPageState extends State<DataPage> {
   Future<void> loadReceiptsFromHive() async {
     final receipts = await HiveService.getAllReceipts();
     setState(() {
-      denemeList = receipts;
+      receiptsList = receipts;
     });
   }
 
   //price list
-  List<dynamic> denemeList = [
-    ["01/02/2022", "120"],
-    ["06/02/2024", "350"],
-    ["08/02/2024", "245"],
-    ["11/02/2024", "90"],
-    ["11/02/2024", "90"],
-    ["11/02/2024", "90"],
-    ["11/02/2024", "90"],
-    ["11/02/2024", "90"],
-    ["11/02/2024", "90"],
-    ["11/02/2024", "90"],
-    ["11/02/2024", "90"],
-    ["08/02/2024", "245"],
-    ["08/02/2024", "245"],
-    ["11/02/2024", "90"],
-    ["11/02/2024", "90"],
-    ["11/02/2024", "90"],
-    ["11/02/2024", "90"],
-    ["11/02/2024", "90"],
-    ["11/02/2024", "90"],
-    ["11/02/2024", "90"],
-    ["08/02/2024", "245"],
-    ["11/02/2024", "90"],
-    ["11/02/2024", "90"],
-    ["11/02/2024", "90"],
-    ["11/02/2024", "90"],
-    ["08/02/2024", "245"],
-    ["11/02/2024", "90"],
-    ["11/02/2024", "90"],
-    ["11/02/2024", "90"],
-    ["11/02/2024", "90"],
+  List<dynamic> receiptsList = [
   ];
 
   // ignore: unused_field
   File? _selectedImage;
 
+//camera or gallery pop-up
   void showPopupButton() async {
     showModalBottomSheet(
       context: context,
@@ -104,7 +75,7 @@ class _DataPageState extends State<DataPage> {
 
   void saveNewTask() {
     setState(() {
-      denemeList.add([_controller1.text, _controller2.text]);
+      receiptsList.add([_controller1.text, _controller2.text]);
       _controller1.clear();
       _controller2.clear();
     });
@@ -127,7 +98,8 @@ class _DataPageState extends State<DataPage> {
 
   void deleteTask(int index){
     setState(() {
-      denemeList.removeAt(index);
+      receiptsList.removeAt(index);
+      HiveService.deleteReceipt(index);
     });
   }
 
@@ -151,14 +123,14 @@ class _DataPageState extends State<DataPage> {
             ),
             Expanded(
               child: ListView.builder(
-                itemCount: denemeList.length,
+                itemCount: receiptsList.length,
                 //shrinkWrap: false,
                 physics: const BouncingScrollPhysics(),
                 itemBuilder: (context, index) {
-                  int reversedIndex = denemeList.length - 1 - index;
+                  int reversedIndex = receiptsList.length - 1 - index;
                   return DataSetConainer(
-                    dayText: denemeList.toList()[reversedIndex][0],
-                    priceText: denemeList.toList()[reversedIndex][1],
+                    dayText: receiptsList.toList()[reversedIndex][0],
+                    priceText: receiptsList.toList()[reversedIndex][1],
                     deleteFunction: (context) => deleteTask(reversedIndex),
                   );
                 },
@@ -202,7 +174,7 @@ class _DataPageState extends State<DataPage> {
     // Check if a valid price was found before adding to the list and Hive
     if (totalPrice != 'Price not found.' && totalPrice.isNotEmpty) {
       setState(() {
-        denemeList.add([standardizeDate(date), totalPrice]);
+        receiptsList.add([standardizeDate(date), totalPrice]);
         _selectedImage = image;
         _controller1.text =
             recognizedText.text; // Optionally store the recognized text
@@ -213,15 +185,16 @@ class _DataPageState extends State<DataPage> {
     } else {
       // Show popup message when no price is found
       showDialog(
+        // ignore: use_build_context_synchronously
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text("Price Not Found"),
-            content: Text(
+            title: const Text("Price Not Found"),
+            content: const Text(
                 "No price was found in the scanned image. Please try again."),
             actions: <Widget>[
               TextButton(
-                child: Text("OK"),
+                child: const Text("OK"),
                 onPressed: () {
                   Navigator.of(context).pop(); // Dismiss the dialog
                 },

@@ -13,7 +13,7 @@ class _CameraPageState extends State<GraphsPage> {
   Widget build(BuildContext context) {
     return  Scaffold(
       body: Container(
-        child: Text("deneme"),
+        child: const Text("deneme"),
       ),
     );
   }

@@ -1,7 +1,7 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
 class HiveService {
-  static String _boxName = "receiptDataBox";
+  static const String _boxName = "receiptDataBox";
 
   // Initialize Hive
   static Future<void> init() async {

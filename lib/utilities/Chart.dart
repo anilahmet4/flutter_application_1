@@ -52,7 +52,7 @@ const ChartCon({
               ),
               Text(varaibleName, 
                 style: GoogleFonts.montserrat(
-                  fontSize: 35,
+                  fontSize: 28,
                   color: Color.fromARGB(255, rgbA, rgbB, rgbC),
                   fontStyle: FontStyle.normal,
                   fontWeight: FontWeight.w800,

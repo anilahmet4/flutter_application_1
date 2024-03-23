@@ -14,9 +14,9 @@ class _GeneralPageState extends State<GeneralPage> {
   int currentIndex = 1;
 
   final screens = [
-    DataPage(),
-    HomePage(),
-    GraphsPage(),
+    const DataPage(),
+    const HomePage(),
+    const GraphsPage(),
   ];
 
   @override

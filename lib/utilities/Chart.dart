@@ -23,9 +23,9 @@ const ChartCon({
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Container(
-        width: 150,
+        width: 170,
         height: 125,
-        padding: const EdgeInsets.all(18.0),
+        padding: const EdgeInsets.all(15.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(35.0),
           color: const Color.fromARGB(255, 255, 255, 255),
@@ -52,7 +52,7 @@ const ChartCon({
               ),
               Text(varaibleName, 
                 style: GoogleFonts.montserrat(
-                  fontSize: 28,
+                  fontSize: 25,
                   color: Color.fromARGB(255, rgbA, rgbB, rgbC),
                   fontStyle: FontStyle.normal,
                   fontWeight: FontWeight.w800,

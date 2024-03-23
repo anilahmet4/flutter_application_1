@@ -12,29 +12,28 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   
-  List<dynamic> receiptsList = [
-  ];
+  List<dynamic> homeReceiptsList = [];
 
   @override 
   void initState() {
     super.initState();
     loadReceiptsFromHive();
+    //HiveService.clearAllReceipts();
   }
 
   Future<void> loadReceiptsFromHive() async {
     final receipts = await HiveService.getAllReceipts();
     setState(() {
-      receiptsList = receipts;
+      homeReceiptsList = receipts;
     });
   }
 
   double calculateTotal() {
-    return receiptsList.fold<double>(0, (previousValue, element) {
+    return homeReceiptsList.fold<double>(0, (previousValue, element) {
       // Assuming element[1] can be parsed to double. Otherwise, consider handling parsing errors.
       return previousValue + double.parse(element[1].toString());
     });
   }
-
   
   @override 
   Widget build(BuildContext context) {
@@ -79,7 +78,7 @@ class _HomePageState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ChartCon(varaibleName: totalAmount.toStringAsFixed(2), topic: "Aylık Gider:",rgbA: 221, rgbB: 13 , rgbC: 13),
-                  const ChartCon(varaibleName: "+300", topic: "Aylık Kazanç:",rgbA: 26, rgbB: 207 , rgbC: 56),
+                  const ChartCon(varaibleName: "+300", topic: "Aylık Gelir:",rgbA: 26, rgbB: 207 , rgbC: 56),
                 ],
               ),
           ],

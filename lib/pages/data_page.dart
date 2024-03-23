@@ -8,6 +8,7 @@ import 'package:flutter_application_1/utilities/dialog_box.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 
 class DataPage extends StatefulWidget {
+
   const DataPage({super.key});
   @override
   State<DataPage> createState() => _DataPageState();

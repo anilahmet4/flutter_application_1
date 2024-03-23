@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 // ignore: must_be_immutable
 class DataSetConainer extends StatelessWidget {
@@ -45,7 +44,7 @@ class DataSetConainer extends StatelessWidget {
               SizedBox(
                 width: 130,
                 child: Text(dayText, 
-                  style: GoogleFonts.montserrat(
+                  style: const TextStyle(
                     fontSize: 18,
                   ), 
                 ),
@@ -53,7 +52,7 @@ class DataSetConainer extends StatelessWidget {
               SizedBox(
                 width: 130,
                 child: Text(" $priceText",
-                  style: GoogleFonts.montserrat(
+                  style: const TextStyle(
                     fontSize: 18,
                   ), 
                 ),

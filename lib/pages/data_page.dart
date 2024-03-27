@@ -10,6 +10,7 @@ import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart
 import 'package:flutter/foundation.dart';
 
 class DataPage extends StatefulWidget {
+
   const DataPage({super.key});
   @override
   State<DataPage> createState() => _DataPageState();

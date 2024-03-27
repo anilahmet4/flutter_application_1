@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:flutter/material.dart';
+
 // Finds dates in the given text
 List<String> findDates(String text) {
   final RegExp datePattern = RegExp(
@@ -11,6 +13,7 @@ List<String> findDates(String text) {
 }
 
 String standardizeDate(String date) {
+  debugPrint('Date: $date');
   final RegExp dateRegex = RegExp(r'(\d{1,2})/(\d{1,2})/(\d{2,4})');
   final match = dateRegex.firstMatch(date);
 
@@ -44,13 +47,14 @@ String standardizeDate(String date) {
   }
 
   // Return the original date if it doesn't match the expected format
+
   return date.replaceAll('.', '/');
 }
 
 // Finds the highest price in the given text
 String findTotalPrice(String text) {
   // Match prices with dots or commas as decimal separators
-  final RegExp pricePattern = RegExp(r'\d+(\.+)(\d{1,2})?');
+  final RegExp pricePattern = RegExp(r'\d+[.,]\d+(?![.,]?\d)');
   final Iterable<RegExpMatch> matches = pricePattern.allMatches(text);
 
   // Convert matches to doubles, taking into account the decimal separator

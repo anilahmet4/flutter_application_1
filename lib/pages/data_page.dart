@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/database.dart';
@@ -6,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter_application_1/utilities/data_set_container.dart';
 import 'package:flutter_application_1/utilities/dialog_box.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'package:flutter/foundation.dart';
 
 class DataPage extends StatefulWidget {
   const DataPage({super.key});
@@ -32,8 +34,7 @@ class _DataPageState extends State<DataPage> {
   }
 
   //price list
-  List<dynamic> receiptsList = [
-  ];
+  List<dynamic> receiptsList = [];
 
   // ignore: unused_field
   File? _selectedImage;
@@ -96,7 +97,7 @@ class _DataPageState extends State<DataPage> {
     );
   }
 
-  void deleteTask(int index){
+  void deleteTask(int index) {
     setState(() {
       receiptsList.removeAt(index);
       HiveService.deleteReceipt(index);
@@ -113,31 +114,30 @@ class _DataPageState extends State<DataPage> {
         backgroundColor: Colors.green,
         child: const Icon(Icons.add),
       ),
-      body:
-        Column(
-          children: [
-            DataSetConainer(
-              dayText: "Fiş Tarihi",
-              priceText: "Tutar",
-              deleteFunction: null,
+      body: Column(
+        children: [
+          DataSetConainer(
+            dayText: "Fiş Tarihi",
+            priceText: "Tutar",
+            deleteFunction: null,
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: receiptsList.length,
+              //shrinkWrap: false,
+              physics: const BouncingScrollPhysics(),
+              itemBuilder: (context, index) {
+                int reversedIndex = receiptsList.length - 1 - index;
+                return DataSetConainer(
+                  dayText: receiptsList.toList()[reversedIndex][0],
+                  priceText: receiptsList.toList()[reversedIndex][1],
+                  deleteFunction: (context) => deleteTask(reversedIndex),
+                );
+              },
             ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: receiptsList.length,
-                //shrinkWrap: false,
-                physics: const BouncingScrollPhysics(),
-                itemBuilder: (context, index) {
-                  int reversedIndex = receiptsList.length - 1 - index;
-                  return DataSetConainer(
-                    dayText: receiptsList.toList()[reversedIndex][0],
-                    priceText: receiptsList.toList()[reversedIndex][1],
-                    deleteFunction: (context) => deleteTask(reversedIndex),
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -160,21 +160,22 @@ class _DataPageState extends State<DataPage> {
     final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
     final RecognizedText recognizedText =
         await textRecognizer.processImage(inputImage);
-
-    // Debug print the recognized text
-    debugPrint(recognizedText.text);
+    log(recognizedText.text);
 
     // Use the recognized text to find the total price and dates
     final String totalPrice = findTotalPrice(recognizedText.text);
     final List<String> dates = findDates(recognizedText.text);
 
     // Optionally, choose the first date found (or handle multiple dates as needed)
-    final String date = dates.isNotEmpty ? dates.first : 'Date not found';
+    final String date =
+        dates.isNotEmpty ? standardizeDate(dates.first) : 'Date not found';
 
-    // Check if a valid price was found before adding to the list and Hive
-    if (totalPrice != 'Price not found.' && totalPrice.isNotEmpty) {
+    // Check if both a valid price and a valid date were found before adding to the list and Hive
+    if (totalPrice != 'Price not found.' &&
+        totalPrice.isNotEmpty &&
+        date != 'Date not found') {
       setState(() {
-        receiptsList.add([standardizeDate(date), totalPrice]);
+        receiptsList.add([date, totalPrice]);
         _selectedImage = image;
         _controller1.text =
             recognizedText.text; // Optionally store the recognized text
@@ -183,15 +184,23 @@ class _DataPageState extends State<DataPage> {
       // Save the date and total price to Hive
       await HiveService.addReceipt([date, totalPrice]);
     } else {
-      // Show popup message when no price is found
+      // Show popup message when no price or no date is found
+      String errorMessage =
+          'No valid date or price was found in the scanned image. Please try again.';
+      if (totalPrice == 'Price not found.' || totalPrice.isEmpty) {
+        errorMessage =
+            'No price was found in the scanned image. Please try again.';
+      } else if (date == 'Date not found') {
+        errorMessage =
+            'No date was found in the scanned image. Please try again.';
+      }
+
       showDialog(
-        // ignore: use_build_context_synchronously
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text("Price Not Found"),
-            content: const Text(
-                "No price was found in the scanned image. Please try again."),
+            title: const Text("Error"),
+            content: Text(errorMessage),
             actions: <Widget>[
               TextButton(
                 child: const Text("OK"),
@@ -204,9 +213,6 @@ class _DataPageState extends State<DataPage> {
         },
       );
     }
-
-    // Debug print
-    debugPrint('Date: $date, Total Price: $totalPrice');
 
     // Dispose of the recognizer when it's no longer needed
     textRecognizer.close();

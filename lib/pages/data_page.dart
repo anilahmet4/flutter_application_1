@@ -7,10 +7,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter_application_1/utilities/data_set_container.dart';
 import 'package:flutter_application_1/utilities/dialog_box.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
-import 'package:flutter/foundation.dart';
+import 'package:date_format/date_format.dart';
 
 class DataPage extends StatefulWidget {
-
   const DataPage({super.key});
   @override
   State<DataPage> createState() => _DataPageState();
@@ -25,6 +24,7 @@ class _DataPageState extends State<DataPage> {
   void initState() {
     super.initState();
     loadReceiptsFromHive();
+    HiveService.printAllReceipts();
   }
 
   Future<void> loadReceiptsFromHive() async {

@@ -13,6 +13,7 @@ List<String> findDates(String text) {
 }
 
 String standardizeDate(String date) {
+  // its not formats the dates with text like '04-Nov-2024'
   debugPrint('Date: $date');
   final RegExp dateRegex = RegExp(r'(\d{1,2})/(\d{1,2})/(\d{2,4})');
   final match = dateRegex.firstMatch(date);
@@ -22,31 +23,24 @@ String standardizeDate(String date) {
     int month = int.parse(match.group(2)!);
     String year = match.group(3)!;
 
-    // If the month part is greater than 12, it's likely a US date format
-    // Swap day and month in that case
     if (month > 12) {
       int temp = day;
       day = month;
       month = temp;
     }
 
-    // Format day and month to two digits
     String formattedDay = day.toString().padLeft(2, '0');
     String formattedMonth = month.toString().padLeft(2, '0');
 
-    // Adjust year format
     if (year.length == 2) {
       year = '20$year';
     } else if (year.length < 4) {
-      // Just in case there's a 3-digit year
-      year = year.padLeft(
-          4, '2'); // This is a simplistic approach; adjust as needed
+      year = year.padLeft(4,
+          '2'); // Adjust this logic as it's not typical to encounter 3-digit years.
     }
 
     return '$formattedDay/$formattedMonth/$year';
   }
-
-  // Return the original date if it doesn't match the expected format
 
   return date.replaceAll('.', '/');
 }

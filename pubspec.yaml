@@ -35,6 +35,7 @@ dependencies:
   flutter_slidable: ^3.1.0
   uuid: ^3.0.5
   date_format: ^2.0.7
+  fl_chart: ^0.67.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

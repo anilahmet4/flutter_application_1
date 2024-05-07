@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/utilities/profile_input_container.dart';
 
-import '../utilities/Chart.dart';
+import '../utilities/chartcon.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});

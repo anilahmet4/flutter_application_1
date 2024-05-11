@@ -11,10 +11,10 @@ class _CameraPageState extends State<GraphsPage> {
   @override 
 
   Widget build(BuildContext context) {
-    return  Scaffold(
-      body: Container(
-        child: const Text("deneme"),
-      ),
+    return const Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+      ]
     );
   }
 }

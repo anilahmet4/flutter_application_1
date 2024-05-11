@@ -2,12 +2,13 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/database.dart';
+import 'package:flutter_application_1/utilities/DateSelector.dart';
 import 'package:flutter_application_1/utilities/text_analysis_util.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_application_1/utilities/data_set_container.dart';
 import 'package:flutter_application_1/utilities/dialog_box.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
-import 'package:date_format/date_format.dart';
+import 'package:flutter_application_1/utilities/data_set_topic_container.dart';
 
 class DataPage extends StatefulWidget {
   const DataPage({super.key});
@@ -116,12 +117,13 @@ class _DataPageState extends State<DataPage> {
         child: const Icon(Icons.add),
       ),
       body: Column(
+        
         children: [
-          DataSetConainer(
-            dayText: "Fiş Tarihi",
-            priceText: "Tutar",
-            deleteFunction: null,
-          ),
+
+          const DateSelector(),
+          const SizedBox(height: 10,),
+          const DataSetTopicCon(),
+          
           Expanded(
             child: ListView.builder(
               itemCount: receiptsList.length,

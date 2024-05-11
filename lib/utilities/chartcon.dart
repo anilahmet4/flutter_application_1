@@ -31,7 +31,7 @@ const ChartCon({
           height: 125,
           padding: const EdgeInsets.all(15.0),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(35.0),
+            borderRadius: BorderRadius.circular(25.0),
             color: const Color.fromARGB(255, 255, 255, 255),
             boxShadow: [
               BoxShadow(

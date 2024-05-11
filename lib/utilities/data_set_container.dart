@@ -11,7 +11,7 @@ class DataSetConainer extends StatelessWidget {
     super.key, 
     required this.dayText, 
     required this.priceText,
-    required this.deleteFunction,
+    this.deleteFunction,
   });
 
   @override
@@ -34,10 +34,8 @@ class DataSetConainer extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(3.0),
           decoration: const BoxDecoration(
-            //color: Colors.yellow,
             border: Border(bottom: BorderSide(width: 0.5)),
           ), 
-          //height: 20,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
